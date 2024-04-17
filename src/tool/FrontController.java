@@ -25,6 +25,19 @@ public class FrontController extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	//TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		try {
+			String path = request.getServletPath().substring(1);
+			String name = path.replace(".a", "A").replace('/', '.');
+			System.out.println("★ servlet path ->" + request.getServletPath());
+			System.out.println("★ class name ->" + name);
+
+			Action action = (Action) Class.forName(name).getDeclaredConstructor().newInstance();
+			action.execute(request, response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
+		}
 	}
 
 
@@ -36,29 +49,8 @@ public class FrontController extends HttpServlet{
 	}
 }
 
-@WebServlet(urlPatterns = {"*.action"})
-public class FrontController extends HttpServlet {
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException, IOException {
-		try {
-			String path = req.getServletPath().substring(1);
-			String name = path.replace(".a", "A").replace('/', '.');
-			System.out.println("★ servlet path ->" + req.getServletPath());
-			System.out.println("★ class name ->" + name);
 
-			Action action = (Action) Class.forName(name).getDeclaredConstructor().newInstance();
-			action.execute(req, res);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			req.getRequestDispatcher("/error.jsp").forward(req, res);
-		}
-	}
-}
-
-protected void doPost(HttpServletRequest req, HttpServletResponce res) throws ServletException, IOException {
-	doGet(req,res);
-}
 
 
 

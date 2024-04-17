@@ -3,14 +3,16 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import bean.School;
 import bean.Student;
 
 public class StudentDao extends Dao {
-//なかに書く
-	private String baseSql;
+
+	private String baseSql = "select * from student where school_cd=?";
 
 	public Student get(String no) throws Exception {
 		Student student = new Student();
@@ -75,7 +77,7 @@ public class StudentDao extends Dao {
 
 	public List<Student> filter(School school, int entYear, String classNum, boolean isAttend) throws Exception{
 		List<Student> list = new ArrayList<>();
-		Connection connection = fetConnuection();
+		Connection connection = getConnection();
 		PreparedStatement statement = null;
 		ResultSet rSet = null;
 		String condition = "and ent_year=? and class_num=?";
@@ -115,6 +117,8 @@ public class StudentDao extends Dao {
 		return list;
 	}
 
+
+
 	public List<Student> filter(School school, int entYear, boolean isAttend) throws Exception{
 		List<Student> list = new ArrayList<>();
 		Connection connection = getConnection();
@@ -122,20 +126,20 @@ public class StudentDao extends Dao {
 		ResultSet rSet = null;
 		String condition = "and ent_year=?";
 		String order = "order by no asc";
-		String conditiionIsAttend = "";
+		String conditionIsAttend = "";
 		if (isAttend) {
 			conditionIsAttend = "and is_attend=true";
 		}
 
 		try {
 			statement = connection.prepareStatement(baseSql + condition + conditionIsAttend + order);
-			statement.setString(1, school getCd());
+			statement.setString(1,school.getCd());
 			statement.setInt(2, entYear);
-			rSet = Statement.executeQuery();
+			rSet = statement.executeQuery();
 			list = postFilter(rSet, school);
 		} catch (Exception e) {
 			throw e;
-		}  finally {
+		} finally {
 			if (statement != null) {
 				try {
 					statement.close();
@@ -193,7 +197,7 @@ public class StudentDao extends Dao {
 
 	public boolean save(Student student) throws Exception{
 		Connection connection = getConnection();
-		PrepareStatement statement = null;
+		PreparedStatement statement = null;
 		int count = 0;
 
 		try {
@@ -209,7 +213,7 @@ public class StudentDao extends Dao {
 				statement.setString(6, student.getSchool().getCd());
 			} else {
 				statement = connection
-						prepareStatement(
+						.prepareStatement(
 								"update student set name=?, ent_year=?, class_num=?, is_attend=? where no=?");
 				statement.setString(1, student.getName());
 				statement.setInt(2, student.getEntYear());
@@ -245,9 +249,9 @@ public class StudentDao extends Dao {
 			return false;
 		}
 	}
+}
 
 
-private String beasSql = "select * from student where school_cd=?";
 
 
 
