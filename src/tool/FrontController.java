@@ -16,15 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-@WebServlet("/FrontController")
+@WebServlet(urlPatterns = {"*.action"})
 public class FrontController extends HttpServlet{
 
 
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	//TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+
 		try {
 			String path = request.getServletPath().substring(1);
 			String name = path.replace(".a", "A").replace('/', '.');
@@ -44,7 +43,7 @@ public class FrontController extends HttpServlet{
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//TODO Auto-generated method stub
+
 		doGet(request, response);
 	}
 }
