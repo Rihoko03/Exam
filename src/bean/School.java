@@ -17,4 +17,8 @@ public class School implements Serializable {
 	public void setName(String name){
 		this.name = name;
 	}
+	public static School parseSchool(String parameter) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 }

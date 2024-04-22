@@ -249,6 +249,16 @@ public class StudentDao extends Dao {
 			return false;
 		}
 	}
+
+	public void insert(Student p) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	public List<Student> search(String string) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 }
 
 
